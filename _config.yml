@@ -24,8 +24,7 @@ github_username:  jmonterroso
 
 # Build settings
 markdown: kramdown
-theme: minima
-remote_theme: daattali/beautiful-jekyll
+remote_theme: "mmistakes/minimal-mistakes"
 plugins:
   - jekyll-feed
 
