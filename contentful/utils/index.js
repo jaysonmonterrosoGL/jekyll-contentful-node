@@ -11,12 +11,6 @@ const client = createClient({
     accessToken: TOKEN
 })
 
-const failBuild = () => {
-    if (ENV !== 'preview') {
-        process.exit(1)
-    }
-}
-
 
 const createFolder = (path) => {
     if (!existsSync(path)) {
