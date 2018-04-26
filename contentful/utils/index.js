@@ -1,4 +1,4 @@
-import { writeFile as writePost, existsSync} from 'fs';
+import { writeFile , existsSync} from 'fs';
 import mkdirp from 'mkdirp';
 import {createClient} from 'contentful'
 import {stringify} from 'json2yaml'
@@ -28,17 +28,26 @@ const writeCollectionFile = ({ path, fileName, header = {}, body = '', extension
     if (!path && !fileName) {
         throw new Error('No path or filename defined to create data file')
     }
-
-    createFolder(path)
+    createFolder(path)    
     const fileContent = `${stringify(header)}---\n${body || ''}`
-    console.log(fileContent)
-    writePost(`${path}${fileName}${extension}`, fileContent, (err) => {
+    writeFile(`${path}${fileName}${extension}`, fileContent, (err) => {
         err
             ? console.log(err)
             : console.log(`\n √ ${path}${fileName}${extension} \n`)
     })
 }
 
-const loadContentType =  (args) => client.getEntries(args);
+const loadContentType = (args) => {
+    return client.getEntries(args)
+        .then(({ items = [], errors }) => {
+            if (errors) {
+                throw new Error('Error getting items from contentful')
+
+            }
+
+            console.log(`Data good: fetching ${items.length} entries from ${args.content_type || args['sys.id']}`)
+            return items
+        })
+}
 
 export { loadContentType, writeCollectionFile}
